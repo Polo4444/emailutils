@@ -52,7 +52,7 @@ func (o *OTP) Verify(code, purpose, entity string) bool {
 // It will assume your email subject and body has a template with the following keys:
 // - {{.Code}}: the code to send
 func (o *OTP) Send(
-	email emailutils.Email,
+	email *emailutils.Email,
 	provider emailutils.Provider,
 	purpose, entity string,
 ) error {
@@ -75,7 +75,7 @@ func (o *OTP) Send(
 	email.Body = body
 
 	// Send email
-	err = provider.Send(&email)
+	err = provider.Send(email)
 	if err != nil {
 		return err
 	}
