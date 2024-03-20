@@ -32,7 +32,7 @@ func NewOTP(cm Store, expireIn time.Duration, codeLength int) *OTP {
 }
 
 // Verify verifies the code and removes it from the list of codes if verified
-func (o *OTP) Verify(code, purpose string) bool {
+func (o *OTP) Verify(code, purpose, entity string) bool {
 
 	// Get code
 	em, err := o.CM.Get(code, purpose)
@@ -40,7 +40,7 @@ func (o *OTP) Verify(code, purpose string) bool {
 		return false
 	}
 
-	if em.checkIfCodeValid(o.ExpireIn) {
+	if em.checkIfCodeValid(o.ExpireIn) && em.Entity == entity {
 		go o.CM.Remove(code, purpose) // We remove the code
 		return true
 	}
